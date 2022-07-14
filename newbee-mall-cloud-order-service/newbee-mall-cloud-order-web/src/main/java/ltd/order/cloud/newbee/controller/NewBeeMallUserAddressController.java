@@ -8,6 +8,7 @@
  */
 package ltd.order.cloud.newbee.controller;
 
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import ltd.common.cloud.newbee.ServiceResultEnum;
@@ -21,6 +22,7 @@ import ltd.order.cloud.newbee.controller.param.UpdateMallUserAddressParam;
 import ltd.order.cloud.newbee.controller.vo.NewBeeMallUserAddressVO;
 import ltd.order.cloud.newbee.entity.MallUserAddress;
 import ltd.order.cloud.newbee.service.NewBeeMallUserAddressService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +31,8 @@ import java.util.List;
 @RestController
 @Api(value = "v1", tags = "新蜂商城个人地址相关接口")
 @RequestMapping("/mall")
+@Transactional
+@GlobalTransactional
 public class NewBeeMallUserAddressController {
 
     @Resource

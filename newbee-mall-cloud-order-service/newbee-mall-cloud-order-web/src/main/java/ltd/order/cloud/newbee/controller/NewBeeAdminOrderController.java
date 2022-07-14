@@ -8,6 +8,7 @@
  */
 package ltd.order.cloud.newbee.controller;
 
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,6 +23,7 @@ import ltd.order.cloud.newbee.controller.vo.NewBeeMallOrderDetailVO;
 import ltd.order.cloud.newbee.service.NewBeeMallOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +40,8 @@ import java.util.Map;
 @RestController
 @Api(value = "v1", tags = "后台管理系统订单模块接口")
 @RequestMapping("/orders/admin")
+@Transactional
+@GlobalTransactional
 public class NewBeeAdminOrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(NewBeeAdminOrderController.class);

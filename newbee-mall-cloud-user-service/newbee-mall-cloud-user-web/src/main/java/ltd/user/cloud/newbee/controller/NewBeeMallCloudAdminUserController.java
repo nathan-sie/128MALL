@@ -10,6 +10,8 @@ package ltd.user.cloud.newbee.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import ltd.common.cloud.newbee.dto.PageQueryUtil;
 import ltd.common.cloud.newbee.dto.Result;
 import ltd.common.cloud.newbee.dto.ResultGenerator;
 import ltd.user.cloud.newbee.config.annotation.TokenToAdminUser;
@@ -20,6 +22,7 @@ import ltd.user.cloud.newbee.entity.AdminUser;
 import ltd.common.cloud.newbee.pojo.AdminUserToken;
 import ltd.user.cloud.newbee.service.AdminUserService;
 
+import ltd.user.cloud.newbee.service.NewBeeMallUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -27,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(value = "v1", tags = "新蜂商城管理员操作相关接口")
 @RestController
@@ -36,6 +41,9 @@ public class NewBeeMallCloudAdminUserController {
 
     @Resource
     private AdminUserService adminUserService;
+
+    @Resource
+    private NewBeeMallUserService newBeeMallUserService;
 
     @ApiOperation(value = "登录接口", notes = "返回token")
     @RequestMapping(value = "/users/admin/login", method = RequestMethod.POST)
@@ -110,5 +118,40 @@ public class NewBeeMallCloudAdminUserController {
         return ResultGenerator.genFailResult("无此用户数据");
     }
 
+    @ApiOperation(value = "获取用户列表")
+    @RequestMapping(value = "/users/admin/list", method = RequestMethod.GET)
+    public Result list(@RequestParam(required = false) @ApiParam(value = "页码") Integer pageNumber,
+                       @RequestParam(required = false) @ApiParam(value = "每页条数") Integer pageSize,@TokenToAdminUser AdminUserToken adminUser) {
+        logger.info("adminUser:{}", adminUser.toString());
+        if (pageNumber == null || pageNumber < 1 || pageSize == null || pageSize < 10) {
+            return ResultGenerator.genFailResult("分页参数异常！");
+        }
+        Map params = new HashMap(8);
+        params.put("page", pageNumber);
+        params.put("limit", pageSize);
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return ResultGenerator.genSuccessResult(newBeeMallUserService.getNewBeeMallUsersPage(pageUtil));
+    }
+
+        /**
+     * 用户禁用与解除禁用(0-未锁定 1-已锁定)
+     */
+    @RequestMapping(value = "/users/admin/lock/{lockStatus}", method = RequestMethod.POST)
+    @ApiOperation(value = "修改用户状态")
+    public Result delete(@RequestBody @ApiParam(value = "选择要锁定的用户ID") Long[] ids,
+                         @PathVariable @ApiParam(value = "切换用户状态，0为锁定，1为解锁") int lockStatus,@TokenToAdminUser AdminUserToken adminUser) {
+        logger.info("adminUser:{}", adminUser.toString());
+        if (ids.length < 1) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        if (lockStatus != 0 && lockStatus != 1) {
+            return ResultGenerator.genFailResult("操作非法！");
+        }
+        if (newBeeMallUserService.lockUsers(ids, lockStatus)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("禁用失败");
+        }
+    }
 
 }

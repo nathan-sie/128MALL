@@ -8,6 +8,7 @@
  */
 package ltd.order.cloud.newbee.controller;
 
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,6 +26,7 @@ import ltd.order.cloud.newbee.controller.vo.NewBeeMallOrderListVO;
 import ltd.order.cloud.newbee.entity.MallUserAddress;
 import ltd.order.cloud.newbee.service.NewBeeMallOrderService;
 import ltd.order.cloud.newbee.service.NewBeeMallUserAddressService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -36,6 +38,8 @@ import java.util.Map;
 @RestController
 @Api(value = "v1", tags = "新蜂商城订单操作相关接口")
 @RequestMapping("/orders/mall")
+@Transactional
+@GlobalTransactional
 public class NewBeeMallOrderController {
 
     @Resource
