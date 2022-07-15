@@ -74,6 +74,7 @@ public class NewBeeAdminGoodsCategoryController {
         return ResultGenerator.genSuccessResult(newBeeMallCategoryService.getCategorisPage(pageUtil));
     }
 
+
     /**
      * 列表
      */

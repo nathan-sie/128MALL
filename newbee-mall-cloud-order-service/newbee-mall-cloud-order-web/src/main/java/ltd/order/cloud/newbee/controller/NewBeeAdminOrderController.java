@@ -20,6 +20,7 @@ import ltd.common.cloud.newbee.pojo.AdminUserToken;
 import ltd.order.cloud.newbee.config.annotation.TokenToAdminUser;
 import ltd.order.cloud.newbee.controller.param.BatchIdParam;
 import ltd.order.cloud.newbee.controller.vo.NewBeeMallOrderDetailVO;
+import ltd.order.cloud.newbee.entity.LoginAdminUser;
 import ltd.order.cloud.newbee.service.NewBeeMallOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class NewBeeAdminOrderController {
     public Result list(@RequestParam(required = false) @ApiParam(value = "页码") Integer pageNumber,
                        @RequestParam(required = false) @ApiParam(value = "每页条数") Integer pageSize,
                        @RequestParam(required = false) @ApiParam(value = "订单号") String orderNo,
-                       @RequestParam(required = false) @ApiParam(value = "订单状态") Integer orderStatus, @TokenToAdminUser AdminUserToken adminUser) {
+                       @RequestParam(required = false) @ApiParam(value = "订单状态") Integer orderStatus, @TokenToAdminUser LoginAdminUser adminUser) {
         logger.info("adminUser:{}", adminUser.toString());
         if (pageNumber == null || pageNumber < 1 || pageSize == null || pageSize < 10) {
             return ResultGenerator.genFailResult("分页参数异常！");
@@ -75,9 +76,10 @@ public class NewBeeAdminOrderController {
         return ResultGenerator.genSuccessResult(newBeeMallOrderService.getNewBeeMallOrdersPage(pageUtil));
     }
 
+
     @GetMapping("/detail/{orderId}")
     @ApiOperation(value = "订单详情接口", notes = "传参为订单号")
-    public Result<NewBeeMallOrderDetailVO> orderDetailPage(@ApiParam(value = "订单号") @PathVariable("orderId") Long orderId, @TokenToAdminUser AdminUserToken adminUser) {
+    public Result<NewBeeMallOrderDetailVO> orderDetailPage(@ApiParam(value = "订单号") @PathVariable("orderId") Long orderId, @TokenToAdminUser LoginAdminUser adminUser) {
         logger.info("adminUser:{}", adminUser.toString());
         return ResultGenerator.genSuccessResult(newBeeMallOrderService.getOrderDetailByOrderId(orderId));
     }
@@ -105,7 +107,7 @@ public class NewBeeAdminOrderController {
      */
     @RequestMapping(value = "/checkOut", method = RequestMethod.PUT)
     @ApiOperation(value = "修改订单状态为已出库", notes = "批量修改")
-    public Result checkOut(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser AdminUserToken adminUser) {
+    public Result checkOut(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser LoginAdminUser adminUser) {
         logger.info("adminUser:{}", adminUser.toString());
         if (batchIdParam==null||batchIdParam.getIds().length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
@@ -123,7 +125,7 @@ public class NewBeeAdminOrderController {
      */
     @RequestMapping(value = "/close", method = RequestMethod.PUT)
     @ApiOperation(value = "修改订单状态为商家关闭", notes = "批量修改")
-    public Result closeOrder(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser AdminUserToken adminUser) {
+    public Result closeOrder(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser LoginAdminUser adminUser) {
         logger.info("adminUser:{}", adminUser.toString());
         if (batchIdParam==null||batchIdParam.getIds().length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
