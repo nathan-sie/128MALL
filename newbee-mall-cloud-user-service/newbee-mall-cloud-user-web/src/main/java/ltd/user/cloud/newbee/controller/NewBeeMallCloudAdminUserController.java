@@ -16,6 +16,7 @@ import ltd.common.cloud.newbee.dto.Result;
 import ltd.common.cloud.newbee.dto.ResultGenerator;
 import ltd.user.cloud.newbee.config.annotation.TokenToAdminUser;
 import ltd.user.cloud.newbee.controller.param.AdminLoginParam;
+import ltd.user.cloud.newbee.controller.param.BatchIdParam;
 import ltd.user.cloud.newbee.controller.param.UpdateAdminNameParam;
 import ltd.user.cloud.newbee.controller.param.UpdateAdminPasswordParam;
 import ltd.user.cloud.newbee.entity.AdminUser;
@@ -138,16 +139,16 @@ public class NewBeeMallCloudAdminUserController {
      */
     @RequestMapping(value = "/users/admin/lock/{lockStatus}", method = RequestMethod.POST)
     @ApiOperation(value = "修改用户状态")
-    public Result delete(@RequestBody @ApiParam(value = "选择要锁定的用户ID") Long[] ids,
-                         @PathVariable @ApiParam(value = "切换用户状态，0为锁定，1为解锁") int lockStatus,@TokenToAdminUser AdminUserToken adminUser) {
+    public Result delete(@RequestBody @ApiParam(value = "选择要锁定的用户ID") BatchIdParam batchIdParam,
+                         @PathVariable @ApiParam(value = "切换用户状态，0为解锁，1为锁定") int lockStatus,@TokenToAdminUser AdminUserToken adminUser) {
         logger.info("adminUser:{}", adminUser.toString());
-        if (ids.length < 1) {
+        if (batchIdParam == null || batchIdParam.getIds().length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }
         if (lockStatus != 0 && lockStatus != 1) {
             return ResultGenerator.genFailResult("操作非法！");
         }
-        if (newBeeMallUserService.lockUsers(ids, lockStatus)) {
+        if (newBeeMallUserService.lockUsers(batchIdParam.getIds(), lockStatus)) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("禁用失败");
