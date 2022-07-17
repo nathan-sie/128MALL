@@ -17,6 +17,7 @@ import ltd.common.cloud.newbee.dto.PageResult;
 import ltd.common.cloud.newbee.dto.Result;
 import ltd.common.cloud.newbee.dto.ResultGenerator;
 import ltd.common.cloud.newbee.exception.NewBeeMallException;
+import ltd.common.cloud.newbee.pojo.AdminUserToken;
 import ltd.common.cloud.newbee.pojo.MallUserToken;
 import ltd.common.cloud.newbee.util.BeanUtil;
 import ltd.goods.cloud.newbee.config.annotation.TokenToMallUser;
@@ -51,7 +52,7 @@ public class NewBeeMallGoodsController {
                                                                     @RequestParam(required = false) @ApiParam(value = "orderBy") String orderBy,
                                                                     @RequestParam(required = false) @ApiParam(value = "页码") Integer pageNumber,
                                                                     @TokenToMallUser MallUserToken loginMallUserToken) {
-        
+
         logger.info("goods search api,keyword={},goodsCategoryId={},orderBy={},pageNumber={},userId={}", keyword, goodsCategoryId, orderBy, pageNumber, loginMallUserToken.getUserId());
 
         Map params = new HashMap(8);
@@ -94,6 +95,31 @@ public class NewBeeMallGoodsController {
         BeanUtil.copyProperties(goods, goodsDetailVO);
         goodsDetailVO.setGoodsCarouselList(goods.getGoodsCarousel().split(","));
         return ResultGenerator.genSuccessResult(goodsDetailVO);
+    }
+
+    @RequestMapping(value = "/star/{id}/{updateUser}", method = RequestMethod.POST)
+    @ApiOperation(value = "修改收藏状态")
+    public Result star(@PathVariable @ApiParam(value = "选择要收藏的商品ID") Long id,
+                         @PathVariable @ApiParam(value = "切换用户状态，0为取消，1收藏") int updateUser,@TokenToMallUser MallUserToken loginMallUserToken) {
+        logger.info("goods detail api,goodsId={},userId={}", id, loginMallUserToken.getUserId());
+        if (id == null) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        if (updateUser != 0 && updateUser != 1) {
+            return ResultGenerator.genFailResult("操作非法！");
+        }
+        if (newBeeMallGoodsService.starGoods(id, updateUser)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("收藏失败");
+        }
+    }
+
+    @GetMapping("/showStar")
+    @ApiOperation(value = "收藏列表(网页移动端不分页)", notes = "")
+    public Result<List<NewBeeMallGoods>> showStar(){
+
+        return ResultGenerator.genSuccessResult(newBeeMallGoodsService.findStar());
     }
 
 }

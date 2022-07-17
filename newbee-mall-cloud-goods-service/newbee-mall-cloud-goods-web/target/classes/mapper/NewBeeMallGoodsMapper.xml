@@ -31,7 +31,7 @@ Copyright (c) 2022 程序员十三 all rights reserved.
     </resultMap>
     <sql id="Base_Column_List">
     goods_id, goods_name, goods_intro,goods_category_id, goods_cover_img, goods_carousel, original_price,
-    selling_price, stock_num, tag, goods_sell_status, create_user, create_time, update_user, 
+    selling_price, stock_num, tag, goods_sell_status, create_user, create_time, update_user,
     update_time
   </sql>
     <sql id="Blob_Column_List">
@@ -183,21 +183,28 @@ Copyright (c) 2022 程序员十三 all rights reserved.
             </if>
         </where>
     </select>
+
+    <select id="findStar" resultType="ltd.goods.cloud.newbee.entity.NewBeeMallGoods">
+        select *
+        from tb_newbee_mall_goods_info
+        where update_user = 1
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from tb_newbee_mall_goods_info
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="ltd.goods.cloud.newbee.entity.NewBeeMallGoods">
-    insert into tb_newbee_mall_goods_info (goods_id, goods_name, goods_intro, 
-      goods_cover_img, goods_carousel, original_price, 
-      selling_price, stock_num, tag, 
-      goods_sell_status, create_user, create_time, 
+    insert into tb_newbee_mall_goods_info (goods_id, goods_name, goods_intro,
+      goods_cover_img, goods_carousel, original_price,
+      selling_price, stock_num, tag,
+      goods_sell_status, create_user, create_time,
       update_user, update_time, goods_detail_content
       )
-    values (#{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsIntro,jdbcType=VARCHAR}, 
-      #{goodsCoverImg,jdbcType=VARCHAR}, #{goodsCarousel,jdbcType=VARCHAR}, #{originalPrice,jdbcType=INTEGER}, 
-      #{sellingPrice,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, 
-      #{goodsSellStatus,jdbcType=TINYINT}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsIntro,jdbcType=VARCHAR},
+      #{goodsCoverImg,jdbcType=VARCHAR}, #{goodsCarousel,jdbcType=VARCHAR}, #{originalPrice,jdbcType=INTEGER},
+      #{sellingPrice,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR},
+      #{goodsSellStatus,jdbcType=TINYINT}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
       #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{goodsDetailContent,jdbcType=LONGVARCHAR}
       )
   </insert>
@@ -390,4 +397,9 @@ Copyright (c) 2022 程序员十三 all rights reserved.
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </update>
+
+    <update id="starGoods">
+        update tb_newbee_mall_goods_info
+        set update_user = #{updateUser} where goods_id = #{id}
+    </update>
 </mapper>

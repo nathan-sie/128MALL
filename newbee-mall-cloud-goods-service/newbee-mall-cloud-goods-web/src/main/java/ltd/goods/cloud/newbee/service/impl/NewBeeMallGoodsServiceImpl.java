@@ -14,6 +14,7 @@ import ltd.common.cloud.newbee.dto.PageQueryUtil;
 import ltd.common.cloud.newbee.dto.PageResult;
 import ltd.common.cloud.newbee.exception.NewBeeMallException;
 import ltd.common.cloud.newbee.util.BeanUtil;
+import ltd.goods.cloud.newbee.controller.vo.NewBeeMallGoodsDetailVO;
 import ltd.goods.cloud.newbee.controller.vo.NewBeeMallSearchGoodsVO;
 import ltd.goods.cloud.newbee.dao.GoodsCategoryMapper;
 import ltd.goods.cloud.newbee.dao.NewBeeMallGoodsMapper;
@@ -140,4 +141,17 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     public Boolean updateStockNum(List<StockNumDTO> stockNumDTOS) {
         return goodsMapper.updateStockNum(stockNumDTOS) > 0;
     }
+
+    @Override
+    public Boolean starGoods(Long id, int updateUser) {
+        return goodsMapper.starGoods(id, updateUser) ;
+    }
+
+    @Override
+    public List<NewBeeMallGoods> findStar() {
+        List<NewBeeMallGoodsDetailVO> newBeeMallGoodsDetailVOS = new ArrayList<>();
+        List<NewBeeMallGoods> newBeeMallGoods = goodsMapper.findStar();
+        return goodsMapper.findStar() ;
+    }
+
 }

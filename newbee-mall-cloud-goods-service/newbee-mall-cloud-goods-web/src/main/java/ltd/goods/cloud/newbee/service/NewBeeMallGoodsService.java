@@ -10,6 +10,7 @@ package ltd.goods.cloud.newbee.service;
 
 import ltd.common.cloud.newbee.dto.PageQueryUtil;
 import ltd.common.cloud.newbee.dto.PageResult;
+import ltd.goods.cloud.newbee.controller.vo.NewBeeMallGoodsDetailVO;
 import ltd.goods.cloud.newbee.entity.NewBeeMallGoods;
 import ltd.goods.cloud.newbee.entity.StockNumDTO;
 import org.apache.ibatis.annotations.Param;
@@ -82,4 +83,8 @@ public interface NewBeeMallGoodsService {
     PageResult searchNewBeeMallGoods(PageQueryUtil pageUtil);
 
     Boolean updateStockNum(List<StockNumDTO> stockNumDTOS);
+
+    Boolean starGoods(Long id, int updateUser);
+
+    List<NewBeeMallGoods> findStar();
 }
