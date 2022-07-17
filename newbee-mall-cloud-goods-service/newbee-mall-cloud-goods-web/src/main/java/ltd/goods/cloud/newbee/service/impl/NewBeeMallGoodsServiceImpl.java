@@ -151,6 +151,7 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     public List<NewBeeMallGoods> findStar() {
         List<NewBeeMallGoodsDetailVO> newBeeMallGoodsDetailVOS = new ArrayList<>();
         List<NewBeeMallGoods> newBeeMallGoods = goodsMapper.findStar();
+        System.out.println(newBeeMallGoods);
         return goodsMapper.findStar() ;
     }
 
