@@ -122,4 +122,11 @@ public class NewBeeMallGoodsController {
         return ResultGenerator.genSuccessResult(newBeeMallGoodsService.findStar());
     }
 
+    @GetMapping("/checkStar/{id}")
+    @ApiOperation(value = "修改收藏状态")
+    public Result checkStar(@ApiParam(value = "商品id") @PathVariable("id") Long id, @TokenToMallUser MallUserToken loginMallUserToken){
+        logger.info("goods detail api,goodsId={},userId={}", id, loginMallUserToken.getUserId());
+        return ResultGenerator.genSuccessResult(newBeeMallGoodsService.checkStar(id));
+    }
+
 }

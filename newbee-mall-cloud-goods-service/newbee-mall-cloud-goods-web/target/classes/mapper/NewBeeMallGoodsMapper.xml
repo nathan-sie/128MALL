@@ -191,6 +191,11 @@ Copyright (c) 2022 程序员十三 all rights reserved.
         where update_user = 1
     </select>
 
+    <select id="checkStar" resultType="java.lang.Integer">
+        select update_user from tb_newbee_mall_goods_info
+        where goods_id = #{id}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from tb_newbee_mall_goods_info
     where goods_id = #{goodsId,jdbcType=BIGINT}

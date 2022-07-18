@@ -155,4 +155,9 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         return goodsMapper.findStar() ;
     }
 
+    @Override
+    public int checkStar(Long id) {
+        return goodsMapper.checkStar(id);
+    }
+
 }

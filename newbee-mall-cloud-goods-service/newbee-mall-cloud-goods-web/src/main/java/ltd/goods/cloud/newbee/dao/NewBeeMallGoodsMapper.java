@@ -53,4 +53,6 @@ public interface NewBeeMallGoodsMapper {
 
     List<NewBeeMallGoods> findStar();
 
+    int checkStar(@Param("id") Long id);
+
 }

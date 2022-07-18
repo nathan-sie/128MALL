@@ -87,4 +87,6 @@ public interface NewBeeMallGoodsService {
     Boolean starGoods(Long id, int updateUser);
 
     List<NewBeeMallGoods> findStar();
+
+    int checkStar(Long id);
 }
