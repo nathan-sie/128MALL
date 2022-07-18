@@ -190,7 +190,7 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
     }
 
     @Override
-    public String paySuccess(String orderNo, int payType) {
+    public String paySuccess(String orderNo) {
         NewBeeMallOrder newBeeMallOrder = newBeeMallOrderMapper.selectByOrderNo(orderNo);
         if (newBeeMallOrder != null) {
             //订单状态判断 非待支付状态下不进行修改操作
@@ -198,7 +198,7 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
                 return ServiceResultEnum.ORDER_STATUS_ERROR.getResult();
             }
             newBeeMallOrder.setOrderStatus((byte) NewBeeMallOrderStatusEnum.ORDER_PAID.getOrderStatus());
-            newBeeMallOrder.setPayType((byte) payType);
+//            newBeeMallOrder.setPayType((byte) payType);
             newBeeMallOrder.setPayStatus((byte) PayStatusEnum.PAY_SUCCESS.getPayStatus());
             newBeeMallOrder.setPayTime(new Date());
             newBeeMallOrder.setUpdateTime(new Date());

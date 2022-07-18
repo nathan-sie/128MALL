@@ -89,7 +89,7 @@ public class NewBeeAdminOrderController {
      */
     @RequestMapping(value = "/checkDone", method = RequestMethod.PUT)
     @ApiOperation(value = "修改订单状态为配货成功", notes = "批量修改")
-    public Result checkDone(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser AdminUserToken adminUser) {
+    public Result checkDone(@RequestBody BatchIdParam batchIdParam, @TokenToAdminUser LoginAdminUser adminUser) {
         logger.info("adminUser:{}", adminUser.toString());
         if (batchIdParam==null||batchIdParam.getIds().length < 1) {
             return ResultGenerator.genFailResult("参数异常！");

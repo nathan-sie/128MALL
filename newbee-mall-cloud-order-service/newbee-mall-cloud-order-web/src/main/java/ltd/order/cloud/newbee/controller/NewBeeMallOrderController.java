@@ -8,6 +8,7 @@
  */
 package ltd.order.cloud.newbee.controller;
 
+import com.alipay.api.AlipayApiException;
 import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,7 @@ import ltd.order.cloud.newbee.controller.vo.NewBeeMallOrderListVO;
 import ltd.order.cloud.newbee.entity.MallUserAddress;
 import ltd.order.cloud.newbee.service.NewBeeMallOrderService;
 import ltd.order.cloud.newbee.service.NewBeeMallUserAddressService;
+import ltd.order.cloud.newbee.utils.MyAlipayUtil;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -113,15 +115,21 @@ public class NewBeeMallOrderController {
         }
     }
 
-    @GetMapping("/paySuccess")
+    @GetMapping("/paySuccess/{orderNo}")
     @ApiOperation(value = "模拟支付成功回调的接口", notes = "传参为订单号和支付方式")
-    public Result paySuccess(@ApiParam(value = "订单号") @RequestParam("orderNo") String orderNo, @ApiParam(value = "支付方式") @RequestParam("payType") int payType) {
-        String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
+    public Result paySuccess(@ApiParam(value = "订单号") @PathVariable("orderNo") String orderNo) {
+        String payResult = newBeeMallOrderService.paySuccess(orderNo);
         if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult(payResult);
         }
+    }
+
+    @PostMapping("/payForIt/{orderNo}")
+    public Result payForIt(@ApiParam(value = "订单号") @PathVariable("orderNo") String orderNo) throws AlipayApiException {
+        String orderForm = MyAlipayUtil.createOrderForm(orderNo);
+        return ResultGenerator.genSuccessResult(orderForm);
     }
 
 }
